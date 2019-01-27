@@ -1,8 +1,10 @@
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <stdio.h>
 #include <string>
 #include "LTexture.h"
+#include "Button.h"
 
 
 //Screen dimension constants
@@ -15,11 +17,15 @@ const int SCREEN_HEIGHT = 480;
 SDL_Window* gWindow = NULL;
 
 //The window renderer
-SDL_Renderer* gRenderer = NULL;
+SDL_Renderer* gRenderer = nullptr;
+
+//Globally used font
+TTF_Font *gFont = NULL;
 
 //Textures
-SDL_Texture* gStdTexture = NULL;
-LTexture gTexture(gRenderer); 
+LTexture*gTexture; 
+LTexture*gTextTexture; 
+Button*gStartButton;
 SDL_Rect gSpriteClips[4];
 
 bool init()
@@ -69,6 +75,13 @@ bool init()
 					printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 					success = false;
 				}
+
+				//Initialize SDL_ttf
+				if (TTF_Init() == -1)
+				{
+					printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+					success = false;
+				}
 			}
 		}
 	}
@@ -81,16 +94,11 @@ bool loadMedia()
 	//Loading succes flag 
 	bool success = true;
 
-	//Load texture
-	//gStdTexture = loadTexture("");
-	//if (gStdTexture == NULL)
-	//{
-	//	printf("Failed to load texture image!\n");
-	//	success = false;
-	//}
+	gTexture = new LTexture();
+	gTextTexture = new LTexture();
 
 		//Load Foo' texture
-	if (!gTexture.loadFromFile("..."))
+	if (!gTexture->loadFromFile("Assets/Art/MainMenuBackground.png", gRenderer))
 	{
 		printf("Failed to load texture image!\n");
 		success = false;
@@ -98,7 +106,25 @@ bool loadMedia()
 	else
 	{
 		//Set standard alpha blending
-		gTexture.setBlendMode(SDL_BLENDMODE_BLEND);
+		gTexture->setBlendMode(SDL_BLENDMODE_BLEND);
+	}
+
+	//Open the font
+	gFont = TTF_OpenFont("Assets/Fonts/Enchanted Land.otf", 72);
+	if (gFont == NULL)
+	{
+		printf("Failed to load font! SDL_ttf Error: %s\n", TTF_GetError());
+		success = false;
+	}
+	else
+	{
+		//Render text
+		SDL_Color textColor = { 255, 255, 255 };
+		if (!gTextTexture->loadFromRenderedText("Shattered Lands", textColor, gRenderer, gFont))
+		{
+			printf("Failed to render text texture!\n");
+			success = false;
+		}
 	}
 	return success;
 }
@@ -133,9 +159,12 @@ SDL_Texture* loadTexture(std::string path)
 void close()
 {
 	//Free surface/Image
-	SDL_DestroyTexture(gStdTexture); 
-	gStdTexture = NULL; 
-	gTexture.free(); 
+	gTexture->free(); 
+	gTextTexture->free();
+
+	//Free global font
+	TTF_CloseFont(gFont);
+	gFont = NULL;
 
 	//Destroy Window 
 	SDL_DestroyRenderer(gRenderer);
@@ -144,6 +173,7 @@ void close()
 	gRenderer = NULL;
 
 	//Quit SDL subsystems 
+	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
 }
@@ -187,9 +217,10 @@ int main(int argc, char* args[])
 				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 				SDL_RenderClear(gRenderer);
 
+
 				//Render texture to screen
-				//SDL_RenderCopy(gRenderer, gStdTexture, NULL, NULL);
-				gTexture.render(0, 0); 
+				gTexture->render(0, 0, gRenderer);
+				gTextTexture->render((SCREEN_WIDTH - gTextTexture->getWidth()) / 2, (SCREEN_HEIGHT - gTextTexture->getHeight()) / 3 , gRenderer);
 
 				//Update screen
 				SDL_RenderPresent(gRenderer);
