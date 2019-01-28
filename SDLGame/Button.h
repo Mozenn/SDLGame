@@ -5,7 +5,7 @@
 #include <SDL_ttf.h>
 #include <stdio.h>
 #include <string>
-#include "LTexture.h"
+#include "Sprite.h"
 
 class Button
 {
@@ -13,7 +13,7 @@ public:
 
 	Button(); 
 
-	Button(LTexture* Texture);
+	Button(Sprite* Texture);
 
 	~Button();
 
@@ -23,13 +23,13 @@ public:
 	bool isPushed(SDL_Event* e);
 
 	// Get attribute 
-	LTexture* getLTexture() const; 
+	Sprite* getSprite() const; 
 
 	//Set attribute 
-	void setLTexture(LTexture* texture);
+	void setSprite(Sprite* texture);
 
 private :
 
-	LTexture* mTexture; 
+	Sprite* mTexture; 
 };
 

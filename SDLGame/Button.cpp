@@ -36,12 +36,12 @@ bool Button::isPushed(SDL_Event* e)
 	return result; 
 }
 
-LTexture* Button::getLTexture() const 
+Sprite* Button::getSprite() const 
 {
 	return mTexture ;
 }
 
-void Button::setLTexture(LTexture* texture)
+void Button::setSprite(Sprite* texture)
 {
 	mTexture = texture; 
 }

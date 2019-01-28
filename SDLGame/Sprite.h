@@ -5,17 +5,18 @@
 #include <SDL_ttf.h>
 #include <stdio.h>
 #include <string>
+#include "SLTypes.h"
 
 
-class LTexture
+class Sprite
 {
 
 public:
 	//Initializes variables
-	LTexture(); 
+	Sprite(); 
 
 	//Deallocates memory
-	~LTexture();
+	~Sprite();
 
 	//Loads image at specified path
 	bool loadFromFile(std::string path, SDL_Renderer* renderer);
@@ -32,6 +33,9 @@ public:
 	//Renders texture at Position 
 	void renderAtPosition( SDL_Renderer* renderer, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
+
+	// SETTER 
+
 	//Set color modulation
 	void setColor(Uint8 red, Uint8 green, Uint8 blue);
 
@@ -43,21 +47,29 @@ public:
 
 	void setPosition(int x, int y);
 
-	//Gets image dimensions
+	void setPriority(ERenderPriority); 
+
+	//GETTER 
+
 	int getWidth();
 	int getHeight();
 
 	SDL_Point getPosition() const; 
 
-private:
+	ERenderPriority getPriority() const; 
 
-	SDL_Point mPosition; 
+private:
 
 	//The actual hardware texture
 	SDL_Texture* mTexture;
 
+	//Image Rendering Position 
+	SDL_Point mPosition;
+
 	//Image dimensions
 	int mWidth;
 	int mHeight;
+
+	ERenderPriority mPriority; 
 
 };

@@ -3,7 +3,7 @@
 #include <SDL_ttf.h>
 #include <stdio.h>
 #include <string>
-#include "LTexture.h"
+#include "Sprite.h"
 #include "Button.h"
 
 
@@ -23,8 +23,8 @@ SDL_Renderer* gRenderer = nullptr;
 TTF_Font *gFont = NULL;
 
 //Textures
-LTexture*gTexture; 
-LTexture*gTextTexture; 
+Sprite*gTexture; 
+Sprite*gTextTexture; 
 Button*gStartButton;
 SDL_Rect gSpriteClips[4];
 
@@ -94,8 +94,8 @@ bool loadMedia()
 	//Loading succes flag 
 	bool success = true;
 
-	gTexture = new LTexture();
-	gTextTexture = new LTexture();
+	gTexture = new Sprite();
+	gTextTexture = new Sprite();
 
 		//Load Foo' texture
 	if (!gTexture->loadFromFile("Assets/Art/MainMenuBackground.png", gRenderer))

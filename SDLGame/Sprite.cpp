@@ -1,7 +1,7 @@
-#include "LTexture.h"
+#include "Sprite.h"
 
 
-LTexture::LTexture()
+Sprite::Sprite()
 {
 	//Initialize
 	mTexture = NULL;
@@ -9,13 +9,13 @@ LTexture::LTexture()
 	mHeight = 0;
 }
 
-LTexture::~LTexture()
+Sprite::~Sprite()
 {
 	//Deallocate
 	free();
 }
 
-bool LTexture::loadFromFile(std::string path, SDL_Renderer* renderer)
+bool Sprite::loadFromFile(std::string path, SDL_Renderer* renderer)
 {
 	//Get rid of preexisting texture
 	free();
@@ -57,13 +57,13 @@ bool LTexture::loadFromFile(std::string path, SDL_Renderer* renderer)
 	return mTexture != NULL;
 }
 
-bool LTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor, SDL_Renderer* renderer, TTF_Font *font )
+bool Sprite::loadFromRenderedText(std::string textureText, SDL_Color textColor, SDL_Renderer* renderer, TTF_Font *font )
 {
 	//Get rid of preexisting texture
 	free();
 
 	//Render text surface
-	SDL_Surface* textSurface = TTF_RenderText_Solid(font, textureText.c_str(), textColor);
+	SDL_Surface* textSurface = TTF_RenderText_Blended(font, textureText.c_str(), textColor);
 	if (textSurface == NULL)
 	{
 		printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
@@ -91,7 +91,7 @@ bool LTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor
 	return mTexture != NULL;
 }
 
-void LTexture::free()
+void Sprite::free()
 {
 	//Free texture if it exists
 	if (mTexture != NULL)
@@ -103,7 +103,7 @@ void LTexture::free()
 	}
 }
 
-void LTexture::render(int x , int y, SDL_Renderer* renderer, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
+void Sprite::render(int x , int y, SDL_Renderer* renderer, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
 	//Set rendering space and render to screen
 	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
@@ -119,7 +119,7 @@ void LTexture::render(int x , int y, SDL_Renderer* renderer, SDL_Rect* clip, dou
 	SDL_RenderCopyEx(renderer, mTexture, clip, &renderQuad, angle, center, flip);
 }
 
-void LTexture::renderAtPosition(SDL_Renderer* renderer, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE)
+void Sprite::renderAtPosition(SDL_Renderer* renderer, SDL_Rect* clip , double angle , SDL_Point* center , SDL_RendererFlip flip )
 {
 	//Set rendering space and render to screen
 	SDL_Rect renderQuad = { mPosition.x, mPosition.y, mWidth, mHeight };
@@ -135,41 +135,53 @@ void LTexture::renderAtPosition(SDL_Renderer* renderer, SDL_Rect* clip = NULL, d
 	SDL_RenderCopyEx(renderer, mTexture, clip, &renderQuad, angle, center, flip);
 }
 
-void LTexture::setColor(Uint8 red, Uint8 green, Uint8 blue)
+void Sprite::setColor(Uint8 red, Uint8 green, Uint8 blue)
 {
 	//Modulate texture
 	SDL_SetTextureColorMod(mTexture, red, green, blue);
 }
 
-void LTexture::setBlendMode(SDL_BlendMode blending)
+void Sprite::setBlendMode(SDL_BlendMode blending)
 {
 	//Set blending function
 	SDL_SetTextureBlendMode(mTexture, blending);
 }
 
-void LTexture::setAlpha(Uint8 alpha)
+void Sprite::setAlpha(Uint8 alpha)
 {
 	//Modulate texture alpha
 	SDL_SetTextureAlphaMod(mTexture, alpha);
 }
 
-void LTexture::setPosition(int x, int y)
+void Sprite::setPosition(int x, int y)
 {
 	mPosition.x = x;
 	mPosition.y = y; 
 }
 
-int LTexture::getWidth()
+void Sprite::setPriority(ERenderPriority priority)
+{
+	mPriority = priority; 
+}
+
+//############### GETTER 
+
+int Sprite::getWidth()
 {
 	return mWidth;
 }
 
-int LTexture::getHeight()
+int Sprite::getHeight()
 {
 	return mHeight;
 }
 
-SDL_Point LTexture::getPosition() const 
+SDL_Point Sprite::getPosition() const 
 {
 	return mPosition; 
+}
+
+ERenderPriority Sprite::getPriority() const
+{
+	return mPriority; 
 }
