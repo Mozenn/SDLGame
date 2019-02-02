@@ -1,15 +1,21 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include <stdio.h>
 #include <string>
+#include <sstream>
 #include "Sprite.h"
 #include "Button.h"
+#include "Timer.h" 
+#include "SLEngineTypes.h"
+
 
 
 //Screen dimension constants
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 1920;
+const int SCREEN_HEIGHT = 1080;
+
 
 //######### GLOBAL VARIABLES #########
 
@@ -22,11 +28,20 @@ SDL_Renderer* gRenderer = nullptr;
 //Globally used font
 TTF_Font *gFont = NULL;
 
+//Controller 
+SDL_Joystick* gGameController = NULL;
+SDL_Haptic* gControllerHaptic = NULL;
+const int JOYSTICK_DEAD_ZONE = 8000;
+
 //Textures
-Sprite*gTexture; 
-Sprite*gTextTexture; 
-Button*gStartButton;
-SDL_Rect gSpriteClips[4];
+Sprite*gBackTexture = new Sprite(BACK);
+Sprite*gTextTexture = new Sprite(UI);
+Sprite*gStartButtonTexture = new Sprite(UI);
+Sprite*gButtonTexture = new Sprite(UI);
+
+//UI 
+Button*gStartButton = new Button(gStartButtonTexture); 
+Button*gButton = new Button(gButtonTexture);
 
 bool init()
 {
@@ -34,7 +49,7 @@ bool init()
 	bool success = true;
 
 	//Initialize SDL 
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC) < 0)
 	{
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 		success = false;
@@ -82,6 +97,13 @@ bool init()
 					printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
 					success = false;
 				}
+
+				//Initialize SDL_mixer
+				if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+				{
+					printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+					success = false;
+				}
 			}
 		}
 	}
@@ -94,11 +116,9 @@ bool loadMedia()
 	//Loading succes flag 
 	bool success = true;
 
-	gTexture = new Sprite();
-	gTextTexture = new Sprite();
 
-		//Load Foo' texture
-	if (!gTexture->loadFromFile("Assets/Art/MainMenuBackground.png", gRenderer))
+		//Load BG texture
+	if (!gBackTexture->loadFromFile("Assets/UI/MainMenuBackground.png", gRenderer))
 	{
 		printf("Failed to load texture image!\n");
 		success = false;
@@ -106,11 +126,35 @@ bool loadMedia()
 	else
 	{
 		//Set standard alpha blending
-		gTexture->setBlendMode(SDL_BLENDMODE_BLEND);
+		gBackTexture->setBlendMode(SDL_BLENDMODE_BLEND);
+	}
+
+	//Load Start Button texture
+	if (!gStartButtonTexture->loadFromFile("Assets/UI/StartButton.png", gRenderer))
+	{
+		printf("Failed to load texture image!\n");
+		success = false;
+	}
+	else
+	{
+		//Set standard alpha blending
+		gStartButtonTexture->setBlendMode(SDL_BLENDMODE_BLEND);
+	}
+
+	//Load Button texture
+	if (!gButtonTexture->loadFromFile("Assets/UI/ButtonDefault.png", gRenderer))
+	{
+		printf("Failed to load texture image!\n");
+		success = false;
+	}
+	else
+	{
+		//Set standard alpha blending
+		gButtonTexture->setBlendMode(SDL_BLENDMODE_BLEND);
 	}
 
 	//Open the font
-	gFont = TTF_OpenFont("Assets/Fonts/Enchanted Land.otf", 72);
+	gFont = TTF_OpenFont("Assets/UI/Fonts/Enchanted Land.otf", 84);
 	if (gFont == NULL)
 	{
 		printf("Failed to load font! SDL_ttf Error: %s\n", TTF_GetError());
@@ -126,7 +170,16 @@ bool loadMedia()
 			success = false;
 		}
 	}
+
+	//Set Texture Position 
+	gStartButton->getSprite()->setPosition((SCREEN_WIDTH - gStartButton->getSprite()->getWidth()) / 2, (SCREEN_HEIGHT - gStartButton->getSprite()->getHeight()) / 1.5);
+	gButton->getSprite()->setPosition((SCREEN_WIDTH - gStartButton->getSprite()->getWidth()) / 1.5, (SCREEN_HEIGHT - gStartButton->getSprite()->getHeight()) / 1.5);
+
+	//Set Button Texture Color 
+	gButton->getSprite()->setColor(45, 45, 45); 
+
 	return success;
+
 }
 
 SDL_Texture* loadTexture(std::string path)
@@ -156,11 +209,57 @@ SDL_Texture* loadTexture(std::string path)
 	return newTexture;
 }
 
+//TODO : Create a class, controller as parametter 
+void loadController()
+{
+	gGameController = SDL_JoystickOpen(0);
+	if (gGameController == NULL)
+	{
+		printf("Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError());
+	}
+	else
+	{
+		//Get controller haptic device
+		gControllerHaptic = SDL_HapticOpenFromJoystick(gGameController);
+		if (gControllerHaptic == NULL)
+		{
+			printf("Warning: Controller does not support haptics! SDL Error: %s\n", SDL_GetError());
+		}
+		else
+		{
+			//Get initialize rumble
+			if (SDL_HapticRumbleInit(gControllerHaptic) < 0)
+			{
+				printf("Warning: Unable to initialize rumble! SDL Error: %s\n", SDL_GetError());
+			}
+		}
+
+		printf("Controller Loaded \n");
+	}
+}
+//TODO : Create a class, controller as parametter 
+void closeController()
+{
+	if (gGameController != NULL)
+	{
+		//Close game controller with haptics
+		SDL_HapticClose(gControllerHaptic);
+		SDL_JoystickClose(gGameController);
+		gGameController = NULL;
+		gControllerHaptic = NULL;
+
+		printf("Controller Closed\n");
+	}
+}
+
 void close()
 {
 	//Free surface/Image
-	gTexture->free(); 
+	gBackTexture->free(); 
 	gTextTexture->free();
+
+	gStartButton->free(); 
+	gButton->free(); 
 
 	//Free global font
 	TTF_CloseFont(gFont);
@@ -173,6 +272,7 @@ void close()
 	gRenderer = NULL;
 
 	//Quit SDL subsystems 
+	Mix_Quit();
 	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
@@ -200,17 +300,40 @@ int main(int argc, char* args[])
 			//Event handler
 			SDL_Event e;
 
+			//Frame per second Timer 
+			Timer fpsTimer; 
+			int countedFrames = 0; 
+			fpsTimer.start(); 
+
 			//While application is running
 			while (!quit)
 			{
 				//Handle events on queue
 				while (SDL_PollEvent(&e) != 0)
 				{
-					//User requests quit
-					if (e.type == SDL_QUIT)
+					switch (e.type)
 					{
-						quit = true;
+					case SDL_QUIT : quit = true;
+						break; 
+					case SDL_JOYDEVICEADDED: loadController();
+						break; 
+					case SDL_JOYDEVICEREMOVED: closeController();
+						break; 
 					}
+					if (gStartButton->isPushed(&e))
+					{
+						if (SDL_HapticRumblePlay(gControllerHaptic, 0.75, 500) != 0)
+						{
+							printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+						}
+					}
+				}
+
+				//Calculate and correct fps
+				float avgFPS = countedFrames / (fpsTimer.getTicks() / 1000.f);
+				if (avgFPS > 2000000)
+				{
+					avgFPS = 0;
 				}
 
 				//Clear screen
@@ -219,8 +342,11 @@ int main(int argc, char* args[])
 
 
 				//Render texture to screen
-				gTexture->render(0, 0, gRenderer);
+				gBackTexture->render(0, 0, gRenderer);
 				gTextTexture->render((SCREEN_WIDTH - gTextTexture->getWidth()) / 2, (SCREEN_HEIGHT - gTextTexture->getHeight()) / 3 , gRenderer);
+				gStartButton->getSprite()->renderAtPosition(gRenderer);
+				gButton->getSprite()->renderAtPosition(gRenderer);
+
 
 				//Update screen
 				SDL_RenderPresent(gRenderer);

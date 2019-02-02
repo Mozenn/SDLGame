@@ -13,14 +13,18 @@ public:
 
 	Button(); 
 
-	Button(Sprite* Texture);
+	Button(Sprite* texture);
 
 	~Button();
+
+	void free(); 
+
 
 	//Handles mouse event
 	//void handleEvent(SDL_Event* e);
 
 	bool isPushed(SDL_Event* e);
+	bool isHovered();
 
 	// Get attribute 
 	Sprite* getSprite() const; 
@@ -31,5 +35,6 @@ public:
 private :
 
 	Sprite* mTexture; 
+	Sprite* mText; 
 };
 

@@ -5,7 +5,7 @@
 #include <SDL_ttf.h>
 #include <stdio.h>
 #include <string>
-#include "SLTypes.h"
+#include "SLEngineTypes.h"
 
 
 class Sprite
@@ -13,7 +13,7 @@ class Sprite
 
 public:
 	//Initializes variables
-	Sprite(); 
+	Sprite(ERenderPriority priority, int x = 0, int y = 0);
 
 	//Deallocates memory
 	~Sprite();

@@ -1,10 +1,12 @@
 #include "Sprite.h"
 
 
-Sprite::Sprite()
+Sprite::Sprite(ERenderPriority priority, int x, int y) : mPriority(priority)
 {
 	//Initialize
 	mTexture = NULL;
+	mPosition.x = x; 
+	mPosition.y = y; 
 	mWidth = 0;
 	mHeight = 0;
 }

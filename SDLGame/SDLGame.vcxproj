@@ -18,6 +18,22 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MovableSprite.cpp" />
+    <ClCompile Include="Source\Object\AnimatedSprite.cpp" />
+    <ClCompile Include="Source\Object\Sprite.cpp" />
+    <ClCompile Include="Source\Source.cpp" />
+    <ClCompile Include="Source\Tools\Timer.cpp" />
+    <ClCompile Include="Source\UI\Button.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MovableSprite.h" />
+    <ClInclude Include="Source\Object\AnimatedSprite.h" />
+    <ClInclude Include="Source\Object\Sprite.h" />
+    <ClInclude Include="Source\SLEngineTypes.h" />
+    <ClInclude Include="Source\Tools\Timer.h" />
+    <ClInclude Include="Source\UI\Button.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{1D9AADA2-0F14-4177-AAB3-FC6722C4367C}</ProjectGuid>
@@ -70,8 +86,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>E:\Dev\Programmation\C++\vs_dev_lib\SDL2_ttf-2.0.15\include;E:\Dev\Programmation\C++\vs_dev_lib\SDL2_image-2.0.4\include;E:\Dev\Programmation\C++\vs_dev_lib\SDL2-2.0.9\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\Dev\Programmation\C++\vs_dev_lib\SDL2_ttf-2.0.15\lib\x86;E:\Dev\Programmation\C++\vs_dev_lib\SDL2_image-2.0.4\lib\x86;E:\Dev\Programmation\C++\vs_dev_lib\SDL2-2.0.9\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\Dev\Programmation\C++\vs_dev_lib\SDL2_mixer-2.0.4\include;E:\Dev\Programmation\C++\vs_dev_lib\SDL2_ttf-2.0.15\include;E:\Dev\Programmation\C++\vs_dev_lib\SDL2_image-2.0.4\include;E:\Dev\Programmation\C++\vs_dev_lib\SDL2-2.0.9\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\Dev\Programmation\C++\vs_dev_lib\SDL2_mixer-2.0.4\lib\x86;E:\Dev\Programmation\C++\vs_dev_lib\SDL2_ttf-2.0.15\lib\x86;E:\Dev\Programmation\C++\vs_dev_lib\SDL2_image-2.0.4\lib\x86;E:\Dev\Programmation\C++\vs_dev_lib\SDL2-2.0.9\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -79,9 +95,10 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\UI;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Tools;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Object;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Game;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL2_image.lib;SDL2.lib;SDL2main.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2_image.lib;SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -121,16 +138,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="Source.cpp" />
-    <ClCompile Include="Sprite.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Button.h" />
-    <ClInclude Include="SLTypes.h" />
-    <ClInclude Include="Sprite.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
