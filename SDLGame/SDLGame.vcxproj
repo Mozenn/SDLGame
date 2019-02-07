@@ -25,6 +25,7 @@
     <ClCompile Include="Source\Source.cpp" />
     <ClCompile Include="Source\Tools\Timer.cpp" />
     <ClCompile Include="Source\UI\Button.cpp" />
+    <ClCompile Include="Source\UI\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MovableSprite.h" />
@@ -33,6 +34,7 @@
     <ClInclude Include="Source\SLEngineTypes.h" />
     <ClInclude Include="Source\Tools\Timer.h" />
     <ClInclude Include="Source\UI\Button.h" />
+    <ClInclude Include="Source\UI\Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

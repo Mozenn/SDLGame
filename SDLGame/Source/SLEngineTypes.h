@@ -2,7 +2,7 @@
 
  #include <vector> 
 
-enum class ERenderPriority 
+enum ERenderPriority 
 {
 	BACK = 0,
 	MIDDLE = 1,
@@ -24,3 +24,9 @@ struct AnimData
 
 	std::vector<AnimFrameData> frameInfo;
 };
+
+//Screen dimension constants
+extern const int SCREEN_WIDTH;
+extern const int SCREEN_HEIGHT;
+
+extern SDL_Renderer* gRenderer; 

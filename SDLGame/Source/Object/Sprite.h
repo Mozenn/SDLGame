@@ -16,22 +16,26 @@ public:
 	Sprite(ERenderPriority priority, int x = 0, int y = 0);
 
 	//Deallocates memory
-	~Sprite();
+	virtual ~Sprite();
 
 	//Loads image at specified path
-	bool loadFromFile(std::string path, SDL_Renderer* renderer);
+	bool loadFromFile(std::string path);
+
+	bool createBlank(int width, int wheight, SDL_TextureAccess = SDL_TEXTUREACCESS_STREAMING); 
+
+	void setAsRenderTarget(); 
 
 	//Creates image from font string
-	bool loadFromRenderedText(std::string textureText, SDL_Color textColor, SDL_Renderer* renderer, TTF_Font *font);
+	bool loadFromRenderedText(std::string textureText, SDL_Color textColor, TTF_Font *font);
 
 	//Deallocates texture
-	void free();
+	virtual void free();
 
 	//Renders texture at given point
-	void render(int x , int y, SDL_Renderer* renderer, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void render(int x , int y, SDL_Rect* clip = nullptr, double angle = 0.0, SDL_Point* center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
 	//Renders texture at Position 
-	void renderAtPosition( SDL_Renderer* renderer, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void renderAtPosition( SDL_Rect* clip = nullptr, double angle = 0.0, SDL_Point* center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
 
 	// SETTER 
@@ -45,7 +49,7 @@ public:
 	//Set alpha modulation
 	void setAlpha(Uint8 alpha);
 
-	void setPosition(int x, int y);
+	void setPosition(int x , int y );
 
 	void setPriority(ERenderPriority); 
 
@@ -58,13 +62,16 @@ public:
 
 	ERenderPriority getPriority() const; 
 
-private:
+protected:
 
 	//The actual hardware texture
 	SDL_Texture* mTexture;
 
+	SDL_Color mColor; 
+
 	//Image Rendering Position 
-	SDL_Point mPosition;
+	float mPosX;
+	float mPosY;
 
 	//Image dimensions
 	int mWidth;

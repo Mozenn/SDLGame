@@ -57,6 +57,9 @@
     <ClCompile Include="MovableSprite.cpp">
       <Filter>Source Files\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Object\AnimatedSprite.h">
@@ -75,6 +78,9 @@
       <Filter>Header Files\Object</Filter>
     </ClInclude>
     <ClInclude Include="Source\SLEngineTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

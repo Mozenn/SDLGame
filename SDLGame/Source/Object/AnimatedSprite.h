@@ -5,9 +5,12 @@
 
 public:
 
-	AnimatedSprite(ERenderPriority priority, int x = 0, int y = 0, AnimData* data,int startAnimNum);
+	AnimatedSprite(ERenderPriority priority, int x = 0, int y = 0, AnimData* data = nullptr,int startAnimNum = 0);
 
-	~AnimatedSprite();
+	virtual ~AnimatedSprite();
+
+	//Deallocates texture
+	void free() override;
 
 	void Initialize(AnimData* data, int startAnimNum); 
 
@@ -18,7 +21,7 @@ public:
 	//Loads images sprite sheet at specified path
 	bool loadArrayFromFile(std::string path, SDL_Renderer* renderer);
 
-private : 
+protected : 
 
 	struct AnimData* mAnimData; 
 

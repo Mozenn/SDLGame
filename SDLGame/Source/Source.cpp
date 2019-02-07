@@ -8,9 +8,8 @@
 #include "Sprite.h"
 #include "Button.h"
 #include "Timer.h" 
+#include "Window.h"
 #include "SLEngineTypes.h"
-
-
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 1920;
@@ -18,30 +17,29 @@ const int SCREEN_HEIGHT = 1080;
 
 
 //######### GLOBAL VARIABLES #########
+//TODO : faire asset manager pour texture,sound, sprite, font, ...
 
 //The window we'll be rendering to
-SDL_Window* gWindow = NULL;
+Window gWindow; 
 
 //The window renderer
 SDL_Renderer* gRenderer = nullptr;
 
 //Globally used font
-TTF_Font *gFont = NULL;
+TTF_Font *gFont = nullptr;
 
 //Controller 
-SDL_Joystick* gGameController = NULL;
-SDL_Haptic* gControllerHaptic = NULL;
+SDL_Joystick* gGameController = nullptr;
+SDL_Haptic* gControllerHaptic = nullptr;
 const int JOYSTICK_DEAD_ZONE = 8000;
 
 //Textures
 Sprite*gBackTexture = new Sprite(BACK);
 Sprite*gTextTexture = new Sprite(UI);
-Sprite*gStartButtonTexture = new Sprite(UI);
-Sprite*gButtonTexture = new Sprite(UI);
 
 //UI 
-Button*gStartButton = new Button(gStartButtonTexture); 
-Button*gButton = new Button(gButtonTexture);
+Button*gStartButton = new Button(); 
+Button*gButton = new Button();
 
 bool init()
 {
@@ -63,8 +61,7 @@ bool init()
 		}
 
 		//Create window
-		gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-		if (gWindow == NULL)
+		if (!gWindow.init())
 		{
 			printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
 			success = false;
@@ -72,8 +69,8 @@ bool init()
 		else
 		{
 			//Create renderer for window
-			gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-			if (gRenderer == NULL)
+			gRenderer = gWindow.createRenderer();
+			if (gRenderer == nullptr)
 			{
 				printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
 				success = false;
@@ -155,7 +152,7 @@ bool loadMedia()
 
 	//Open the font
 	gFont = TTF_OpenFont("Assets/UI/Fonts/Enchanted Land.otf", 84);
-	if (gFont == NULL)
+	if (gFont == nullptr)
 	{
 		printf("Failed to load font! SDL_ttf Error: %s\n", TTF_GetError());
 		success = false;
@@ -185,11 +182,11 @@ bool loadMedia()
 SDL_Texture* loadTexture(std::string path)
 {
 	//The final texture
-	SDL_Texture* newTexture = NULL;
+	SDL_Texture* newTexture = nullptr;
 
 	//Load image at specified path
 	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
-	if (loadedSurface == NULL)
+	if (loadedSurface == nullptr)
 	{
 		printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
 	}
@@ -197,7 +194,7 @@ SDL_Texture* loadTexture(std::string path)
 	{
 		//Create texture from surface pixels
 		newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
-		if (newTexture == NULL)
+		if (newTexture == nullptr)
 		{
 			printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
 		}
@@ -213,7 +210,7 @@ SDL_Texture* loadTexture(std::string path)
 void loadController()
 {
 	gGameController = SDL_JoystickOpen(0);
-	if (gGameController == NULL)
+	if (gGameController == nullptr)
 	{
 		printf("Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError());
 	}
@@ -221,7 +218,7 @@ void loadController()
 	{
 		//Get controller haptic device
 		gControllerHaptic = SDL_HapticOpenFromJoystick(gGameController);
-		if (gControllerHaptic == NULL)
+		if (gControllerHaptic == nullptr)
 		{
 			printf("Warning: Controller does not support haptics! SDL Error: %s\n", SDL_GetError());
 		}
@@ -240,13 +237,13 @@ void loadController()
 //TODO : Create a class, controller as parametter 
 void closeController()
 {
-	if (gGameController != NULL)
+	if (gGameController != nullptr)
 	{
 		//Close game controller with haptics
 		SDL_HapticClose(gControllerHaptic);
 		SDL_JoystickClose(gGameController);
-		gGameController = NULL;
-		gControllerHaptic = NULL;
+		gGameController = nullptr;
+		gControllerHaptic = nullptr;
 
 		printf("Controller Closed\n");
 	}
@@ -263,13 +260,12 @@ void close()
 
 	//Free global font
 	TTF_CloseFont(gFont);
-	gFont = NULL;
+	gFont = nullptr;
 
 	//Destroy Window 
 	SDL_DestroyRenderer(gRenderer);
-	SDL_DestroyWindow(gWindow);
-	gWindow = NULL;
-	gRenderer = NULL;
+	gWindow.free(); 
+	gRenderer = nullptr;
 
 	//Quit SDL subsystems 
 	Mix_Quit();
@@ -305,6 +301,9 @@ int main(int argc, char* args[])
 			int countedFrames = 0; 
 			fpsTimer.start(); 
 
+			// Keeps track of time between steps 
+			Timer stepTimer; 
+
 			//While application is running
 			while (!quit)
 			{
@@ -329,12 +328,18 @@ int main(int argc, char* args[])
 					}
 				}
 
+				// Calculate Time step 
+				float timeStep = stepTimer.getTicks() / 1000.f; 
+
 				//Calculate and correct fps
 				float avgFPS = countedFrames / (fpsTimer.getTicks() / 1000.f);
 				if (avgFPS > 2000000)
 				{
 					avgFPS = 0;
 				}
+
+				//Restart step timer 
+				stepTimer.start(); 
 
 				//Clear screen
 				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
