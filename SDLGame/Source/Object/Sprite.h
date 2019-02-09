@@ -19,7 +19,7 @@ public:
 	virtual ~Sprite();
 
 	//Loads image at specified path
-	bool loadFromFile(std::string path);
+	virtual bool load(std::string path);
 
 	bool createBlank(int width, int wheight, SDL_TextureAccess = SDL_TEXTUREACCESS_STREAMING); 
 
@@ -36,7 +36,6 @@ public:
 
 	//Renders texture at Position 
 	void renderAtPosition( SDL_Rect* clip = nullptr, double angle = 0.0, SDL_Point* center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
-
 
 	// SETTER 
 
@@ -67,7 +66,6 @@ protected:
 	//The actual hardware texture
 	SDL_Texture* mTexture;
 
-	SDL_Color mColor; 
 
 	//Image Rendering Position 
 	float mPosX;

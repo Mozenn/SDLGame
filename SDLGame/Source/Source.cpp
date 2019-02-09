@@ -39,7 +39,6 @@ Sprite*gTextTexture = new Sprite(UI);
 
 //UI 
 Button*gStartButton = new Button(); 
-Button*gButton = new Button();
 
 bool init()
 {
@@ -115,7 +114,7 @@ bool loadMedia()
 
 
 		//Load BG texture
-	if (!gBackTexture->loadFromFile("Assets/UI/MainMenuBackground.png", gRenderer))
+	if (!gBackTexture->loadFromFile("Assets/UI/MainMenuBackground.png"))
 	{
 		printf("Failed to load texture image!\n");
 		success = false;

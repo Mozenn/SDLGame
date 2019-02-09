@@ -31,6 +31,7 @@
     <ClInclude Include="MovableSprite.h" />
     <ClInclude Include="Source\Object\AnimatedSprite.h" />
     <ClInclude Include="Source\Object\Sprite.h" />
+    <ClInclude Include="Source\Object\TextSprite.h" />
     <ClInclude Include="Source\SLEngineTypes.h" />
     <ClInclude Include="Source\Tools\Timer.h" />
     <ClInclude Include="Source\UI\Button.h" />

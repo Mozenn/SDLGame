@@ -1,13 +1,17 @@
 #pragma once
 
  #include <vector> 
+#include <SDL_ttf.h>
 
 enum ERenderPriority 
 {
-	BACK = 0,
-	MIDDLE = 1,
-	FRONT = 2,
-	UI = 3
+	BACK1 = 0,
+	BACK2 = 1,
+	BACK3 = 2,
+	FRONT1 = 3,
+	FRONT2 = 4,
+	FRONT3 = 5,
+	UI = 6
 };
 
 struct AnimFrameData
