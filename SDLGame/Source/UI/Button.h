@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <string>
 #include "Sprite.h"
+#include "TextSprite.h"
 
 class Button
 {
@@ -32,9 +33,9 @@ public:
 	Sprite* getSprite() const; 
 
 	//Set attribute 
-	bool loadSpriteFromFile(std::string path);
+	bool loadSprite(std::string path);
 
-	bool loadFromRenderedText(std::string textureText, SDL_Color textColor, TTF_Font *font);
+	bool loadText(std::string textureText, SDL_Color textColor, TTF_Font *font);
 
 	void setTextureColor(Uint8 red, Uint8 green, Uint8 blue);
 
@@ -47,6 +48,6 @@ public:
 private :
 
 	Sprite* mTexture; 
-	Sprite* mText; 
+	TextSprite* mText; 
 };
 

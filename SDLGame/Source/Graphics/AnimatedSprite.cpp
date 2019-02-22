@@ -2,7 +2,7 @@
 
 
 
-AnimatedSprite::AnimatedSprite(ERenderPriority priority, int x , int y, int startAnimNum) : Sprite(priority,x,y)
+AnimatedSprite::AnimatedSprite(ERenderPriority priority, float x , float y, AnimData* data, int startAnimNum) : Sprite(priority,x,y)
 {
 	Initialize(data,startAnimNum); 
 }

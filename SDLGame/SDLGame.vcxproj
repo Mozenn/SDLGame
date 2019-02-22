@@ -19,18 +19,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MovableSprite.cpp" />
-    <ClCompile Include="Source\Object\AnimatedSprite.cpp" />
-    <ClCompile Include="Source\Object\Sprite.cpp" />
+    <ClCompile Include="Source\Graphics\AnimatedSprite.cpp" />
+    <ClCompile Include="Source\Graphics\BaseSprite.cpp" />
+    <ClCompile Include="Source\Graphics\MovableSprite.cpp" />
+    <ClCompile Include="Source\Graphics\Sprite.cpp" />
+    <ClCompile Include="Source\Graphics\TextSprite.cpp" />
     <ClCompile Include="Source\Source.cpp" />
     <ClCompile Include="Source\Tools\Timer.cpp" />
     <ClCompile Include="Source\UI\Button.cpp" />
     <ClCompile Include="Source\UI\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MovableSprite.h" />
-    <ClInclude Include="Source\Object\AnimatedSprite.h" />
-    <ClInclude Include="Source\Object\Sprite.h" />
+    <ClInclude Include="Source\Graphics\AnimatedSprite.h" />
+    <ClInclude Include="Source\Graphics\BaseSprite.h" />
+    <ClInclude Include="Source\Graphics\MovableSprite.h" />
+    <ClInclude Include="Source\Graphics\Sprite.h" />
+    <ClInclude Include="Source\Graphics\TextSprite.h" />
     <ClInclude Include="Source\Object\TextSprite.h" />
     <ClInclude Include="Source\SLEngineTypes.h" />
     <ClInclude Include="Source\Tools\Timer.h" />
@@ -98,7 +102,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\UI;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Tools;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Object;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Game;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Graphics;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\UI;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Tools;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Object;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>SDL2_image.lib;SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>

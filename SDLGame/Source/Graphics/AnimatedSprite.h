@@ -5,7 +5,7 @@
 
 public:
 
-	AnimatedSprite(ERenderPriority priority, int x = 0, int y = 0, AnimData* data = nullptr,int startAnimNum = 0);
+	AnimatedSprite(ERenderPriority priority, float x = 0, float y = 0, AnimData* data = nullptr, int startAnimNum = 0);
 
 	virtual ~AnimatedSprite();
 

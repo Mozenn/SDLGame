@@ -11,7 +11,8 @@ enum ERenderPriority
 	FRONT1 = 3,
 	FRONT2 = 4,
 	FRONT3 = 5,
-	UI = 6
+	UI1 = 6,
+	UI2 = 7
 };
 
 struct AnimFrameData

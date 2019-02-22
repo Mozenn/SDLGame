@@ -92,7 +92,7 @@ void Button::setSprite(Sprite* texture)
 	mTexture = texture;
 }
 
-void Button::setTextureColor(Uint8 red, Uint8 green, Uint8 blue)
+void Button::setText(std::string text)
 {
 	mTexture->setColor(red, green, blue); 
 }

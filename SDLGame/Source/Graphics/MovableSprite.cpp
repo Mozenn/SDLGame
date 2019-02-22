@@ -68,6 +68,6 @@ void MovableSprite::move(float deltaTime)
 	}
 	else if (mPosY + mHeight > SCREEN_HEIGHT)
 	{
-		SCREEN_HEIGHT - mHeight; 
+		mPosY = SCREEN_HEIGHT - mHeight;
 	}
 }
