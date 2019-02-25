@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Entity\Actor.cpp" />
     <ClCompile Include="Source\Graphics\AnimatedSprite.cpp" />
     <ClCompile Include="Source\Graphics\BaseSprite.cpp" />
-    <ClCompile Include="Source\Graphics\MovableSprite.cpp" />
     <ClCompile Include="Source\Graphics\Sprite.cpp" />
     <ClCompile Include="Source\Graphics\TextSprite.cpp" />
     <ClCompile Include="Source\Source.cpp" />
@@ -30,9 +30,9 @@
     <ClCompile Include="Source\UI\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Entity\Actor.h" />
     <ClInclude Include="Source\Graphics\AnimatedSprite.h" />
     <ClInclude Include="Source\Graphics\BaseSprite.h" />
-    <ClInclude Include="Source\Graphics\MovableSprite.h" />
     <ClInclude Include="Source\Graphics\Sprite.h" />
     <ClInclude Include="Source\Graphics\TextSprite.h" />
     <ClInclude Include="Source\Object\TextSprite.h" />

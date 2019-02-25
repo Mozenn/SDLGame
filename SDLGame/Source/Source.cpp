@@ -4,6 +4,7 @@
 #include <SDL_mixer.h>
 #include <stdio.h>
 #include <string>
+#include <list>
 #include <sstream>
 #include "Sprite.h"
 #include "Button.h"
@@ -16,7 +17,7 @@ const int SCREEN_WIDTH = 1920;
 const int SCREEN_HEIGHT = 1080;
 
 
-//######### GLOBAL VARIABLES #########
+//######### GLOBAL Ressource #########
 //TODO : faire asset manager pour texture,sound, sprite, font, ...
 
 //The window we'll be rendering to
@@ -34,11 +35,14 @@ SDL_Haptic* gControllerHaptic = nullptr;
 const int JOYSTICK_DEAD_ZONE = 8000;
 
 //Textures
-Sprite*gBackTexture = new Sprite(BACK);
-Sprite*gTextTexture = new Sprite(UI);
+std::list<BaseSprite*> Sprites; 
+Sprite*gBackTexture = new Sprite(BACK2);
+TextSprite*gTextTexture = new TextSprite(BACK1);
+Sprite* gPH1 = new Sprite(FRONT1); 
+
 
 //UI 
-Button*gStartButton = new Button(); 
+//Button*gStartButton = new Button(); 
 
 bool init()
 {
@@ -114,7 +118,7 @@ bool loadMedia()
 
 
 		//Load BG texture
-	if (!gBackTexture->loadFromFile("Assets/UI/MainMenuBackground.png"))
+	if (!gBackTexture->load("Assets/UI/MainMenuBackground.png"))
 	{
 		printf("Failed to load texture image!\n");
 		success = false;
@@ -123,31 +127,34 @@ bool loadMedia()
 	{
 		//Set standard alpha blending
 		gBackTexture->setBlendMode(SDL_BLENDMODE_BLEND);
+		Sprites.push_back(gBackTexture);
+	}
+
+	//Load PH1 texture
+	if (!gPH1->load("Assets/Art/PH1.png"))
+	{
+		printf("Failed to load texture image!\n");
+		success = false;
+	}
+	else
+	{
+		//Set standard alpha blending
+		gPH1->setBlendMode(SDL_BLENDMODE_BLEND);
+		gPH1->setPosition((SCREEN_WIDTH - gPH1->getWidth()) / 2, (SCREEN_HEIGHT - gPH1->getHeight()) / 1.5);
+		Sprites.push_back(gPH1);
 	}
 
 	//Load Start Button texture
-	if (!gStartButtonTexture->loadFromFile("Assets/UI/StartButton.png", gRenderer))
-	{
-		printf("Failed to load texture image!\n");
-		success = false;
-	}
-	else
-	{
-		//Set standard alpha blending
-		gStartButtonTexture->setBlendMode(SDL_BLENDMODE_BLEND);
-	}
-
-	//Load Button texture
-	if (!gButtonTexture->loadFromFile("Assets/UI/ButtonDefault.png", gRenderer))
-	{
-		printf("Failed to load texture image!\n");
-		success = false;
-	}
-	else
-	{
-		//Set standard alpha blending
-		gButtonTexture->setBlendMode(SDL_BLENDMODE_BLEND);
-	}
+	//if (!gStartButton->loadSprite("Assets/UI/StartButton.png"))
+	//{
+	//	printf("Failed to load texture image!\n");
+	//	success = false;
+	//}
+	//else
+	//{
+	//	//Set standard alpha blending
+	//	gStartButtonTexture->setBlendMode(SDL_BLENDMODE_BLEND);
+	//}
 
 	//Open the font
 	gFont = TTF_OpenFont("Assets/UI/Fonts/Enchanted Land.otf", 84);
@@ -160,49 +167,26 @@ bool loadMedia()
 	{
 		//Render text
 		SDL_Color textColor = { 255, 255, 255 };
-		if (!gTextTexture->loadFromRenderedText("Shattered Lands", textColor, gRenderer, gFont))
+		if (!gTextTexture->load("Shattered Lands", textColor, gFont))
 		{
 			printf("Failed to render text texture!\n");
 			success = false;
 		}
+		else
+		{
+			gTextTexture->setPosition((SCREEN_WIDTH - gTextTexture->getWidth()) / 2, (SCREEN_HEIGHT - gTextTexture->getHeight()) / 3);
+			Sprites.push_back(gTextTexture);
+		}
 	}
 
 	//Set Texture Position 
-	gStartButton->getSprite()->setPosition((SCREEN_WIDTH - gStartButton->getSprite()->getWidth()) / 2, (SCREEN_HEIGHT - gStartButton->getSprite()->getHeight()) / 1.5);
-	gButton->getSprite()->setPosition((SCREEN_WIDTH - gStartButton->getSprite()->getWidth()) / 1.5, (SCREEN_HEIGHT - gStartButton->getSprite()->getHeight()) / 1.5);
+	//gStartButton->getSprite()->setPosition((SCREEN_WIDTH - gStartButton->getSprite()->getWidth()) / 2, (SCREEN_HEIGHT - gStartButton->getSprite()->getHeight()) / 1.5);
 
-	//Set Button Texture Color 
-	gButton->getSprite()->setColor(45, 45, 45); 
+	// Sort Sprites on Render Priority 
+	Sprites.sort(); 
 
 	return success;
 
-}
-
-SDL_Texture* loadTexture(std::string path)
-{
-	//The final texture
-	SDL_Texture* newTexture = nullptr;
-
-	//Load image at specified path
-	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
-	if (loadedSurface == nullptr)
-	{
-		printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
-	}
-	else
-	{
-		//Create texture from surface pixels
-		newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
-		if (newTexture == nullptr)
-		{
-			printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
-		}
-
-		//Get rid of old loaded surface
-		SDL_FreeSurface(loadedSurface);
-	}
-
-	return newTexture;
 }
 
 //TODO : Create a class, controller as parametter 
@@ -251,11 +235,15 @@ void closeController()
 void close()
 {
 	//Free surface/Image
-	gBackTexture->free(); 
-	gTextTexture->free();
+	for (BaseSprite* it : Sprites)
+	{
+		it->free(); 
+	}
+	//gBackTexture->free(); 
+	//gTextTexture->free();
+	//gPH1->free(); 
 
-	gStartButton->free(); 
-	gButton->free(); 
+	//gStartButton->free(); 
 
 	//Free global font
 	TTF_CloseFont(gFont);
@@ -318,13 +306,13 @@ int main(int argc, char* args[])
 					case SDL_JOYDEVICEREMOVED: closeController();
 						break; 
 					}
-					if (gStartButton->isPushed(&e))
-					{
-						if (SDL_HapticRumblePlay(gControllerHaptic, 0.75, 500) != 0)
-						{
-							printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
-						}
-					}
+					//if (gStartButton->isPushed(&e))
+					//{
+					//	if (SDL_HapticRumblePlay(gControllerHaptic, 0.75, 500) != 0)
+					//	{
+					//		printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+					//	}
+					//}
 				}
 
 				// Calculate Time step 
@@ -346,10 +334,15 @@ int main(int argc, char* args[])
 
 
 				//Render texture to screen
-				gBackTexture->render(0, 0, gRenderer);
-				gTextTexture->render((SCREEN_WIDTH - gTextTexture->getWidth()) / 2, (SCREEN_HEIGHT - gTextTexture->getHeight()) / 3 , gRenderer);
-				gStartButton->getSprite()->renderAtPosition(gRenderer);
-				gButton->getSprite()->renderAtPosition(gRenderer);
+				//for (BaseSprite* it : Sprites)
+				//{
+				//	printf(" %d ", it->getPriority()); 
+				//	it->renderAtPosition();
+				//}
+				gBackTexture->renderAtPosition();
+				gTextTexture->renderAtPosition();
+				gPH1->renderAtPosition();
+				/*gStartButton->getSprite()->renderAtPosition();*/
 
 
 				//Update screen

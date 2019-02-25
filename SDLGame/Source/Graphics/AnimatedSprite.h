@@ -5,7 +5,7 @@
 
 public:
 
-	AnimatedSprite(ERenderPriority priority, float x = 0, float y = 0, AnimData* data = nullptr, int startAnimNum = 0);
+	AnimatedSprite(ERenderPriority priority, float x = 0, float y = 0);
 
 	virtual ~AnimatedSprite();
 
@@ -18,16 +18,25 @@ public:
 
 	void updateAnim(float deltaTime); 
 
+	// TODO 
 	//Loads images sprite sheet at specified path
-	bool loadArrayFromFile(std::string path, SDL_Renderer* renderer);
+	bool loadSprites(std::vector<std::string> path);
+
+	// TODO : load the animData member
+	bool loadSpriteSheet(std::string path, int width, int height); 
 
 protected : 
-
+	// Used if useSpriteSheet is false  
 	struct AnimData* mAnimData; 
 
-	int currentSprite;
+	// Use if useSpriteSheet is true 
+	struct SpriteSheetData *mSpriteSheetData; 
+
+	int currentAnim;
 	int currentFrame; 
 	float frameTime; 
 	float animFPS = 24.f; 
+
+	bool useSpriteSheet; 
 };
 

@@ -1,18 +1,16 @@
-#include "MovableSprite.h"
+#include "Actor.h"
 
+Actor::Actor(Sprite* sprite) : mVelX(0), mVelY(0), mSprite(sprite)
+{
+}
 
-
-MovableSprite::MovableSprite(ERenderPriority priority, int x, int y, AnimData* data, int startAnimNum) : AnimatedSprite(priority,x,y,data,startAnimNum), mVelX(0), mVelY(0)
+Actor::~Actor()
 {
 
 }
 
 
-MovableSprite::~MovableSprite()
-{
-}
-
-void MovableSprite::handleEvent(SDL_Event& e)
+void Actor::handleEvent(SDL_Event& e)
 {
 	//If a key was pressed
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
@@ -40,8 +38,7 @@ void MovableSprite::handleEvent(SDL_Event& e)
 	}
 }
 
-//TODO ; find a way to deal with screen dimentions 
-void MovableSprite::move(float deltaTime)
+void Actor::move(float deltaTime)
 {
 	//Move the dot left or right
 	mPosX += mVelX * deltaTime;
@@ -50,11 +47,11 @@ void MovableSprite::move(float deltaTime)
 	if (mPosX < 0)
 	{
 		//Move back
-		mPosX = 0 ;
+		mPosX = 0;
 	}
 	else if (mPosX + mWidth > SCREEN_WIDTH)
 	{
-		mPosX = SCREEN_WIDTH - mWidth; 
+		mPosX = SCREEN_WIDTH - mWidth;
 	}
 
 	//Move the dot up or down

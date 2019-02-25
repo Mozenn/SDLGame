@@ -5,14 +5,14 @@
 
 enum ERenderPriority 
 {
-	BACK1 = 0,
+	BACK3 = 0,
 	BACK2 = 1,
-	BACK3 = 2,
-	FRONT1 = 3,
+	BACK1 = 2,
+	FRONT3 = 3,
 	FRONT2 = 4,
-	FRONT3 = 5,
-	UI1 = 6,
-	UI2 = 7
+	FRONT1 = 5,
+	UI2 = 6,
+	UI1 = 7
 };
 
 struct AnimFrameData
@@ -26,6 +26,12 @@ struct AnimFrameData
 struct AnimData
 {
 	std::vector<SDL_Texture*> sprites; 
+
+	std::vector<AnimFrameData> frameInfo;
+};
+
+struct SpriteSheetData
+{
 
 	std::vector<AnimFrameData> frameInfo;
 };

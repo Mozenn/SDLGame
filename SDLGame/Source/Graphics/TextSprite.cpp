@@ -104,3 +104,10 @@ void TextSprite::setFont(TTF_Font *font)
 
 	load();
 }
+
+void TextSprite::setText(std::string text)
+{
+	mText = text;
+
+	load();
+}

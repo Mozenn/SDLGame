@@ -4,7 +4,7 @@
 
 Button::Button()
 {
-	mTexture->loadFromFile("Assets / UI / ButtonDefault.png");
+	
 }
 
 Button::~Button()
@@ -27,7 +27,7 @@ void Button::render(int x, int y, SDL_Rect* clip , double angle , SDL_Point* cen
 	}
 }
 
-void Button::renderAtPosition(SDL_Rect* clip = nullptr, double angle = 0.0, SDL_Point* center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE)
+void Button::renderAtPosition(SDL_Rect* clip , double angle , SDL_Point* center , SDL_RendererFlip flip )
 {
 	mTexture->renderAtPosition( clip, angle, center, flip);
 	if (mText != nullptr)
@@ -47,7 +47,7 @@ bool Button::isPushed(SDL_Event* e)
 		int x, y;
 		SDL_GetMouseState(&x, &y);
 
-		if (x >= mTexture->getPosition().x && x <= mTexture->getPosition().x + mTexture->getWidth() && y >= mTexture->getPosition().y && y <= mTexture->getPosition().y + mTexture->getHeight())
+		if (x >= mTexture->getXPosition() && x <= mTexture->getYPosition() + mTexture->getWidth() && y >= mTexture->getYPosition() && y <= mTexture->getYPosition() + mTexture->getHeight())
 		{
 			result = true;
 		}
@@ -64,7 +64,7 @@ bool Button::isHovered()
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 
-	if (x >= mTexture->getPosition().x && x <= mTexture->getPosition().x + mTexture->getWidth() && y >= mTexture->getPosition().y && y <= mTexture->getPosition().y + mTexture->getHeight())
+	if (x >= mTexture->getXPosition() && x <= mTexture->getXPosition() + mTexture->getWidth() && y >= mTexture->getYPosition() && y <= mTexture->getYPosition() + mTexture->getHeight())
 	{
 		result = true;
 	}
@@ -72,14 +72,14 @@ bool Button::isHovered()
 	return result;
 }
 
-bool Button::loadSpriteFromFile(std::string path)
+bool Button::loadSprite(std::string path)
 {
-	mTexture->loadFromFile(path); 
+	return mTexture->load(path); 
 }
 
-bool Button::loadFromRenderedText(std::string textureText, SDL_Color textColor, TTF_Font *font)
+bool Button::loadText(std::string textureText, SDL_Color textColor, TTF_Font *font)
 {
-	mText->loadFromRenderedText
+	return mText->load(textureText, textColor, font); 
 }
 
 Sprite* Button::getSprite() const
@@ -87,14 +87,34 @@ Sprite* Button::getSprite() const
 	return mTexture;
 }
 
+TextSprite* Button::getText() const
+{
+	return mText; 
+}
+
 void Button::setSprite(Sprite* texture)
 {
 	mTexture = texture;
 }
 
+void Button::setTextSprite(TextSprite* text)
+{
+	mText = text; 
+}
+
+void Button::setTextureColor(Uint8 red, Uint8 green, Uint8 blue)
+{
+	mTexture->setColor(red, green, blue);
+}
+
+void Button::setTextureAlpha(Uint8 alpha)
+{
+	mTexture->setAlpha(alpha); 
+}
+
 void Button::setText(std::string text)
 {
-	mTexture->setColor(red, green, blue); 
+	mText->setText(text); 
 }
 
 void Button::setTextColor(Uint8 red, Uint8 green, Uint8 blue)
@@ -104,4 +124,12 @@ void Button::setTextColor(Uint8 red, Uint8 green, Uint8 blue)
 		mText->setColor(red, green, blue);
 	}
 	
+}
+
+void Button::setTextAlpha(Uint8 alpha)
+{
+	if (mText)
+	{
+		mText->setAlpha(alpha);
+	}
 }

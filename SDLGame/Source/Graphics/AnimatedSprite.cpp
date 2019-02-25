@@ -2,9 +2,8 @@
 
 
 
-AnimatedSprite::AnimatedSprite(ERenderPriority priority, float x , float y, AnimData* data, int startAnimNum) : Sprite(priority,x,y)
+AnimatedSprite::AnimatedSprite(ERenderPriority priority, float x , float y) : Sprite(priority,x,y)
 {
-	Initialize(data,startAnimNum); 
 }
 
 
@@ -34,12 +33,12 @@ void AnimatedSprite::Initialize(AnimData* data, int startAnimNum)
 
 void AnimatedSprite::changeAnim(int num)
 {
-	currentSprite = num; 
+	currentAnim = num; 
 	currentFrame = 0; 
 	frameTime = 0.f; 
 
 	//set Starting frame 
-	int spriteNum = mAnimData->frameInfo[currentSprite].startFrame; 
+	int spriteNum = mAnimData->frameInfo[currentAnim].startFrame; 
 	mTexture = mAnimData->sprites[spriteNum]; 
 }
 
@@ -52,13 +51,13 @@ void AnimatedSprite::updateAnim(float deltaTime)
 	{
 		currentFrame += frameTime * animFPS; 
 
-		if (currentFrame >= mAnimData->frameInfo[currentSprite].numFrames)
+		if (currentFrame >= mAnimData->frameInfo[currentAnim].numFrames)
 		{
-			currentFrame = currentFrame % mAnimData->frameInfo[currentSprite].numFrames; 
+			currentFrame = currentFrame % mAnimData->frameInfo[currentAnim].numFrames; 
 		}
 
 		//update active sprite 
-		int spriteNum = mAnimData->frameInfo[currentSprite].startFrame + currentFrame; 
+		int spriteNum = mAnimData->frameInfo[currentAnim].startFrame + currentFrame; 
 		mTexture = mAnimData->sprites[spriteNum]; 
 
 		frameTime = fmod(frameTime, 1 / animFPS); 

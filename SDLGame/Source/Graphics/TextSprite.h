@@ -16,13 +16,15 @@ public:
 	// SETTER 
 
 	//Set alpha modulation
-	virtual void setAlpha(Uint8 alpha);
+	void setAlpha(Uint8 alpha);
 
 	//Set color modulation
-	virtual void setColor(Uint8 red, Uint8 green, Uint8 blue);
+	void setColor(Uint8 red, Uint8 green, Uint8 blue);
 
 	//Set color modulation
-	virtual void setFont(TTF_Font *font);
+	void setFont(TTF_Font *font);
+
+	void setText(std::string text); 
 
 protected:
 

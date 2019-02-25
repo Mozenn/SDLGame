@@ -70,4 +70,10 @@ protected:
 
 	ERenderPriority mPriority;
 
+	friend bool operator==(BaseSprite const& a, BaseSprite const& b);
+	friend bool operator!=(BaseSprite const& a, BaseSprite const& b);
+	friend bool operator<(BaseSprite const& a, BaseSprite const& b);
+	friend bool operator>(BaseSprite const& a, BaseSprite const& b);
+
 };
+

@@ -32,6 +32,8 @@ public:
 
 	Sprite* getSprite() const; 
 
+	TextSprite* getText() const; 
+
 	//Set attribute 
 	bool loadSprite(std::string path);
 
@@ -39,11 +41,17 @@ public:
 
 	void setTextureColor(Uint8 red, Uint8 green, Uint8 blue);
 
+	void setTextureAlpha(Uint8 alpha);
+
 	void setTextColor(Uint8 red, Uint8 green, Uint8 blue);
 
 	void setText(std::string text); 
 
+	void setTextAlpha(Uint8 alpha);
+
 	void setSprite(Sprite* sprite); 
+
+	void setTextSprite(TextSprite* text); 
 
 private :
 
