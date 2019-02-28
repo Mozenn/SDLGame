@@ -21,20 +21,25 @@ struct AnimFrameData
 	int startFrame; 
 	//total number of frame 
 	int numFrames; 
-};
-
-struct AnimData
-{
-	std::vector<SDL_Texture*> sprites; 
-
-	std::vector<AnimFrameData> frameInfo;
+	// Array of sprite clips for each frame 
+	//std::vector<SDL_Rect> spriteClips;
 };
 
 struct SpriteSheetData
 {
+	int framePerRow;
 
-	std::vector<AnimFrameData> frameInfo;
+	int frameWidth;
+
+	int frameHeight;
+
+	std::vector<AnimFrameData> animData;
 };
+
+template<typename T> bool PComp(T* a, T* b)
+{
+	return *a < *b;
+}
 
 //Screen dimension constants
 extern const int SCREEN_WIDTH;

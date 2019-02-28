@@ -7,6 +7,7 @@
 #include <list>
 #include <sstream>
 #include "Sprite.h"
+#include "AnimatedSprite.h"
 #include "Button.h"
 #include "Timer.h" 
 #include "Window.h"
@@ -39,6 +40,10 @@ std::list<BaseSprite*> Sprites;
 Sprite*gBackTexture = new Sprite(BACK2);
 TextSprite*gTextTexture = new TextSprite(BACK1);
 Sprite* gPH1 = new Sprite(FRONT1); 
+AnimatedSprite* gPHAnim = new AnimatedSprite(FRONT1); 
+
+
+
 
 
 //UI 
@@ -117,35 +122,8 @@ bool loadMedia()
 	bool success = true;
 
 
-		//Load BG texture
-	if (!gBackTexture->load("Assets/UI/MainMenuBackground.png"))
-	{
-		printf("Failed to load texture image!\n");
-		success = false;
-	}
-	else
-	{
-		//Set standard alpha blending
-		gBackTexture->setBlendMode(SDL_BLENDMODE_BLEND);
-		Sprites.push_back(gBackTexture);
-	}
-
-	//Load PH1 texture
-	if (!gPH1->load("Assets/Art/PH1.png"))
-	{
-		printf("Failed to load texture image!\n");
-		success = false;
-	}
-	else
-	{
-		//Set standard alpha blending
-		gPH1->setBlendMode(SDL_BLENDMODE_BLEND);
-		gPH1->setPosition((SCREEN_WIDTH - gPH1->getWidth()) / 2, (SCREEN_HEIGHT - gPH1->getHeight()) / 1.5);
-		Sprites.push_back(gPH1);
-	}
-
-	//Load Start Button texture
-	//if (!gStartButton->loadSprite("Assets/UI/StartButton.png"))
+	//	//Load BG texture
+	//if (!gBackTexture->load("Assets/UI/MainMenuBackground.png"))
 	//{
 	//	printf("Failed to load texture image!\n");
 	//	success = false;
@@ -153,8 +131,44 @@ bool loadMedia()
 	//else
 	//{
 	//	//Set standard alpha blending
-	//	gStartButtonTexture->setBlendMode(SDL_BLENDMODE_BLEND);
+	//	gBackTexture->setBlendMode(SDL_BLENDMODE_BLEND);
+	//	Sprites.push_back(gBackTexture);
 	//}
+
+	////Load PH1 texture
+	//if (!gPH1->load("Assets/Art/PH1.png"))
+	//{
+	//	printf("Failed to load texture image!\n");
+	//	success = false;
+	//}
+	//else
+	//{
+	//	//Set standard alpha blending
+	//	gPH1->setBlendMode(SDL_BLENDMODE_BLEND);
+	//	gPH1->setPosition((SCREEN_WIDTH - gPH1->getWidth()) / 2, (SCREEN_HEIGHT - gPH1->getHeight()) / 1.5);
+	//	Sprites.push_back(gPH1);
+	//}
+
+	// Setup PHAnim Data 
+	std::vector<AnimFrameData> gPHData;
+	AnimFrameData Anim1; 
+	Anim1.startFrame = 0; 
+	Anim1.numFrames = 2; 
+	gPHData.push_back(Anim1); 
+
+	//Load PHAnim texture
+	if (!gPHAnim->loadSpriteSheet("Assets/Art/PHSheet.png",128,102,gPHData))
+	{
+		printf("Failed to load texture image!\n");
+		success = false;
+	}
+	else
+	{
+		//Set standard alpha blending
+		gPHAnim->setBlendMode(SDL_BLENDMODE_BLEND);
+		gPHAnim->setPosition((SCREEN_WIDTH - gPHAnim->getFrameWidth()) / 2, (SCREEN_HEIGHT - gPHAnim->getFrameHeight()) / 1.5);
+		Sprites.push_back(gPHAnim);
+	}
 
 	//Open the font
 	gFont = TTF_OpenFont("Assets/UI/Fonts/Enchanted Land.otf", 84);
@@ -165,7 +179,7 @@ bool loadMedia()
 	}
 	else
 	{
-		//Render text
+		//Load TextSprite 
 		SDL_Color textColor = { 255, 255, 255 };
 		if (!gTextTexture->load("Shattered Lands", textColor, gFont))
 		{
@@ -179,11 +193,8 @@ bool loadMedia()
 		}
 	}
 
-	//Set Texture Position 
-	//gStartButton->getSprite()->setPosition((SCREEN_WIDTH - gStartButton->getSprite()->getWidth()) / 2, (SCREEN_HEIGHT - gStartButton->getSprite()->getHeight()) / 1.5);
-
 	// Sort Sprites on Render Priority 
-	Sprites.sort(); 
+	Sprites.sort(PComp<BaseSprite>);
 
 	return success;
 
@@ -270,6 +281,7 @@ int main(int argc, char* args[])
 	}
 	else
 	{
+		printf("HEY");
 		//Load Media 
 		if (!loadMedia())
 		{
@@ -306,13 +318,6 @@ int main(int argc, char* args[])
 					case SDL_JOYDEVICEREMOVED: closeController();
 						break; 
 					}
-					//if (gStartButton->isPushed(&e))
-					//{
-					//	if (SDL_HapticRumblePlay(gControllerHaptic, 0.75, 500) != 0)
-					//	{
-					//		printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
-					//	}
-					//}
 				}
 
 				// Calculate Time step 
@@ -325,6 +330,18 @@ int main(int argc, char* args[])
 					avgFPS = 0;
 				}
 
+				//
+				AnimatedSprite* temp; 
+				for (BaseSprite* it : Sprites)
+				{
+					temp = dynamic_cast<AnimatedSprite*>(it); 
+					if (temp)
+					{
+						temp->updateAnim(timeStep); 
+					}
+					
+				}
+
 				//Restart step timer 
 				stepTimer.start(); 
 
@@ -334,15 +351,11 @@ int main(int argc, char* args[])
 
 
 				//Render texture to screen
-				//for (BaseSprite* it : Sprites)
-				//{
-				//	printf(" %d ", it->getPriority()); 
-				//	it->renderAtPosition();
-				//}
-				gBackTexture->renderAtPosition();
-				gTextTexture->renderAtPosition();
-				gPH1->renderAtPosition();
-				/*gStartButton->getSprite()->renderAtPosition();*/
+				for (BaseSprite* it : Sprites)
+				{
+					printf(" %d ", it->getPriority()); 
+					it->renderAtPosition();
+				}
 
 
 				//Update screen

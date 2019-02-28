@@ -12,31 +12,33 @@ public:
 	//Deallocates texture
 	void free() override;
 
-	void Initialize(AnimData* data, int startAnimNum); 
-
 	void changeAnim(int num); 
 
 	void updateAnim(float deltaTime); 
 
-	// TODO 
-	//Loads images sprite sheet at specified path
-	bool loadSprites(std::vector<std::string> path);
-
 	// TODO : load the animData member
-	bool loadSpriteSheet(std::string path, int width, int height); 
+	bool loadSpriteSheet(std::string path, int frameWidth, int frameHeight, std::vector<AnimFrameData> AnimData);
+
+	//Renders texture at given point
+	virtual void render(int x, int y, SDL_Rect* clip = nullptr, double angle = 0.0, SDL_Point* center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE) override;
+
+	//Renders texture at Position 
+	virtual void renderAtPosition(SDL_Rect* clip = nullptr, double angle = 0.0, SDL_Point* center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE) override ;
+
+
+	//GETTER
+	int getFrameWidth() const; 
+	int getFrameHeight() const;
 
 protected : 
-	// Used if useSpriteSheet is false  
-	struct AnimData* mAnimData; 
 
 	// Use if useSpriteSheet is true 
 	struct SpriteSheetData *mSpriteSheetData; 
 
+
 	int currentAnim;
 	int currentFrame; 
 	float frameTime; 
-	float animFPS = 24.f; 
-
-	bool useSpriteSheet; 
+	float animFPS = 6.f; 
 };
 

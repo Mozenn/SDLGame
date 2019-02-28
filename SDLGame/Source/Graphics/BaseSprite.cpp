@@ -137,3 +137,4 @@ bool operator>(BaseSprite const& a, BaseSprite const& b)
 {
 	return a.mPriority > b.mPriority;
 }
+

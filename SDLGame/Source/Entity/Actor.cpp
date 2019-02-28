@@ -40,31 +40,31 @@ void Actor::handleEvent(SDL_Event& e)
 
 void Actor::move(float deltaTime)
 {
-	//Move the dot left or right
-	mPosX += mVelX * deltaTime;
+	////Move the dot left or right
+	//mPosX += mVelX * deltaTime;
 
-	//If the dot went too far to the left or right
-	if (mPosX < 0)
-	{
-		//Move back
-		mPosX = 0;
-	}
-	else if (mPosX + mWidth > SCREEN_WIDTH)
-	{
-		mPosX = SCREEN_WIDTH - mWidth;
-	}
+	////If the dot went too far to the left or right
+	//if (mPosX < 0)
+	//{
+	//	//Move back
+	//	mPosX = 0;
+	//}
+	//else if (mPosX + mWidth > SCREEN_WIDTH)
+	//{
+	//	mPosX = SCREEN_WIDTH - mWidth;
+	//}
 
-	//Move the dot up or down
-	mPosY += mVelY * deltaTime;
+	////Move the dot up or down
+	//mPosY += mVelY * deltaTime;
 
-	//If the dot went too far up or down
-	if (mPosY < 0)
-	{
-		//Move back
-		mPosY -= mVelY;
-	}
-	else if (mPosY + mHeight > SCREEN_HEIGHT)
-	{
-		mPosY = SCREEN_HEIGHT - mHeight;
-	}
+	////If the dot went too far up or down
+	//if (mPosY < 0)
+	//{
+	//	//Move back
+	//	mPosY -= mVelY;
+	//}
+	//else if (mPosY + mHeight > SCREEN_HEIGHT)
+	//{
+	//	mPosY = SCREEN_HEIGHT - mHeight;
+	//}
 }
