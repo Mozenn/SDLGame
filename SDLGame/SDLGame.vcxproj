@@ -19,7 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Engine\GameStateManager.cpp" />
     <ClCompile Include="Source\Entity\Actor.cpp" />
+    <ClCompile Include="Source\Entity\GameInstance.cpp" />
+    <ClCompile Include="Source\Entity\GameState.cpp" />
     <ClCompile Include="Source\Graphics\AnimatedSprite.cpp" />
     <ClCompile Include="Source\Graphics\BaseSprite.cpp" />
     <ClCompile Include="Source\Graphics\Sprite.cpp" />
@@ -30,7 +33,10 @@
     <ClCompile Include="Source\UI\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Engine\GameStateManager.h" />
     <ClInclude Include="Source\Entity\Actor.h" />
+    <ClInclude Include="Source\Entity\GameInstance.h" />
+    <ClInclude Include="Source\Entity\GameState.h" />
     <ClInclude Include="Source\Graphics\AnimatedSprite.h" />
     <ClInclude Include="Source\Graphics\BaseSprite.h" />
     <ClInclude Include="Source\Graphics\Sprite.h" />
@@ -102,7 +108,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Graphics;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\UI;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Tools;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Object;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Engine;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Graphics;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\UI;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Tools;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Object;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Entity;E:\Dev\Programmation\C++\SDL2\SDLGame\SDLGame\Source\Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>SDL2_image.lib;SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>

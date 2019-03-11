@@ -1,5 +1,27 @@
 #pragma once
 #include "Sprite.h"
+
+struct AnimFrameData
+{
+	//index of the first frame of animation 
+	int startFrame;
+	//total number of frame 
+	int numFrames;
+	// Array of sprite clips for each frame 
+	//std::vector<SDL_Rect> spriteClips;
+};
+
+struct SpriteSheetData
+{
+	int framePerRow;
+
+	int frameWidth;
+
+	int frameHeight;
+
+	std::vector<AnimFrameData> animData;
+};
+
  class AnimatedSprite : public Sprite
 {
 

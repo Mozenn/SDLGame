@@ -7,6 +7,18 @@
 #include <string>
 #include "SLEngineTypes.h"
 
+enum ERenderPriority
+{
+	BACK3 = 0,
+	BACK2 = 1,
+	BACK1 = 2,
+	FRONT3 = 3,
+	FRONT2 = 4,
+	FRONT1 = 5,
+	UI2 = 6,
+	UI1 = 7
+};
+
 class BaseSprite
 {
 
